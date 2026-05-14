@@ -6,6 +6,7 @@ import time
 SERVICE_NAME = os.getenv("SERVICE_NAME", "auth-service")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT", "5001"))
 
+
 app = Flask(__name__)
 
 REQUEST_COUNT = Counter(
