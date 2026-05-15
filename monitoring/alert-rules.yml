@@ -1,0 +1,20 @@
+groups:
+  - name: hotel-booking-alerts
+    rules:
+      - alert: BookingServiceDown
+        expr: up{job="booking-service"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Booking Service is down"
+          description: "Prometheus cannot scrape Booking Service."
+
+      - alert: HighServiceErrorRate
+        expr: increase(service_errors_total[1m]) > 3
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High service error rate"
+          description: "A service is producing too many errors."
