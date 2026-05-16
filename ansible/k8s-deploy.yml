@@ -1,0 +1,70 @@
+---
+- name: Deploy Hotel Booking system to Kubernetes
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  become: no
+
+  tasks:
+    - name: Check Kubernetes cluster nodes
+      command: kubectl get nodes
+      register: k8s_nodes
+
+    - name: Display Kubernetes nodes
+      debug:
+        var: k8s_nodes.stdout_lines
+
+    - name: Apply Kubernetes namespace
+      command: kubectl apply -f kubernetes/namespace.yaml
+      args:
+        chdir: /mnt/c/Users/user/booking_sre_endterm
+
+    - name: Apply Kubernetes ConfigMap
+      command: kubectl apply -f kubernetes/configmap.yaml
+      args:
+        chdir: /mnt/c/Users/user/booking_sre_endterm
+
+    - name: Apply Kubernetes manifests
+      command: kubectl apply -f kubernetes/
+      args:
+        chdir: /mnt/c/Users/user/booking_sre_endterm
+
+    - name: Get Kubernetes pods
+      command: kubectl get pods -n hotel-booking
+      register: k8s_pods
+
+    - name: Display Kubernetes pods
+      debug:
+        var: k8s_pods.stdout_lines
+
+    - name: Get Kubernetes deployments
+      command: kubectl get deployments -n hotel-booking
+      register: k8s_deployments
+
+    - name: Display Kubernetes deployments
+      debug:
+        var: k8s_deployments.stdout_lines
+
+    - name: Get Kubernetes services
+      command: kubectl get services -n hotel-booking
+      register: k8s_services
+
+    - name: Display Kubernetes services
+      debug:
+        var: k8s_services.stdout_lines
+
+    - name: Get Kubernetes ConfigMaps
+      command: kubectl get configmaps -n hotel-booking
+      register: k8s_configmaps
+
+    - name: Display Kubernetes ConfigMaps
+      debug:
+        var: k8s_configmaps.stdout_lines
+
+    - name: Get Kubernetes HPA
+      command: kubectl get hpa -n hotel-booking
+      register: k8s_hpa
+
+    - name: Display Kubernetes HPA
+      debug:
+        var: k8s_hpa.stdout_lines

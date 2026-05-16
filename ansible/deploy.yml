@@ -3,24 +3,45 @@
   hosts: localhost
   connection: local
   gather_facts: no
+  become: no
 
   tasks:
     - name: Stop existing containers
       command: docker compose down
       args:
-        chdir: C:\Users\user\booking_sre_endterm
+        chdir: /mnt/c/Users/user/booking_sre_endterm
 
-    - name: Build and start containers
+    - name: Build and start containers including monitoring tools
       command: docker compose up --build -d
       args:
-        chdir: C:\Users\user\booking_sre_endterm
+        chdir: /mnt/c/Users/user/booking_sre_endterm
 
     - name: Show running containers
       command: docker compose ps
       args:
-        chdir: C:\Users\user\booking_sre_endterm
+        chdir: /mnt/c/Users/user/booking_sre_endterm
       register: compose_status
 
     - name: Display deployment result
       debug:
         var: compose_status.stdout_lines
+
+    - name: Check Prometheus container status
+      command: docker compose ps prometheus
+      args:
+        chdir: /mnt/c/Users/user/booking_sre_endterm
+      register: prometheus_status
+
+    - name: Display Prometheus status
+      debug:
+        var: prometheus_status.stdout_lines
+
+    - name: Check Grafana container status
+      command: docker compose ps grafana
+      args:
+        chdir: /mnt/c/Users/user/booking_sre_endterm
+      register: grafana_status
+
+    - name: Display Grafana status
+      debug:
+        var: grafana_status.stdout_lines

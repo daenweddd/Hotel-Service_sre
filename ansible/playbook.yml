@@ -1,0 +1,35 @@
+---
+- name: Configure Hotel Booking SRE environment
+  hosts: servers
+  become: no
+
+  tasks:
+    - name: Check Docker version
+      command: docker --version
+      register: docker_version
+
+    - name: Display Docker version
+      debug:
+        var: docker_version.stdout
+
+    - name: Check Docker Compose version
+      command: docker compose version
+      register: compose_version
+
+    - name: Display Docker Compose version
+      debug:
+        var: compose_version.stdout
+
+    - name: Check project files
+      command: ls
+      args:
+        chdir: /mnt/c/Users/user/booking_sre_endterm
+      register: project_files
+
+    - name: Display project files
+      debug:
+        var: project_files.stdout_lines
+
+    - name: Verify environment configuration
+      debug:
+        msg: "Environment is configured for Hotel Booking SRE deployment."
