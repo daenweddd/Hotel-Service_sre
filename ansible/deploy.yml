@@ -1,0 +1,26 @@
+---
+- name: Automated deployment for Hotel Booking SRE Project
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Stop existing containers
+      command: docker compose down
+      args:
+        chdir: C:\Users\user\booking_sre_endterm
+
+    - name: Build and start containers
+      command: docker compose up --build -d
+      args:
+        chdir: C:\Users\user\booking_sre_endterm
+
+    - name: Show running containers
+      command: docker compose ps
+      args:
+        chdir: C:\Users\user\booking_sre_endterm
+      register: compose_status
+
+    - name: Display deployment result
+      debug:
+        var: compose_status.stdout_lines

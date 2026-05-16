@@ -1,0 +1,74 @@
+services:
+  frontend:
+    image: hotel-booking-frontend:latest
+    ports:
+      - "8080:80"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+  auth-service:
+    image: hotel-booking-auth-service:latest
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+  hotel-service:
+    image: hotel-booking-hotel-service:latest
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+  room-service:
+    image: hotel-booking-room-service:latest
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+  booking-service:
+    image: hotel-booking-booking-service:latest
+    environment:
+      DB_HOST: postgres
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+
+  payment-service:
+    image: hotel-booking-payment-service:latest
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+  notification-service:
+    image: hotel-booking-notification-service:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  user-service:
+    image: hotel-booking-user-service:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: hotel_user
+      POSTGRES_PASSWORD: hotel_pass
+      POSTGRES_DB: hotel_booking
+    deploy:
+      replicas: 1
+
+  redis:
+    image: redis:7-alpine
+    deploy:
+      replicas: 1
